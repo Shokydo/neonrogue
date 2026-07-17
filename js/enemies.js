@@ -21,9 +21,6 @@
     };
 
     enemies.push(enemy);
-
-    // Диагностика: проверим, что speed/attack реально есть у типа
-    console.log('[spawnEnemy]', enemy.type, 'hp', enemy.hp, 'pos', enemy.x, enemy.y);
   }
 
   function spawnBoss() {
