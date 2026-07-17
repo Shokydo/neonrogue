@@ -1,6 +1,10 @@
 ﻿document.addEventListener('keydown', e => {
   const k = e.key.toLowerCase();
   keys[k] = true;
+  if (lobbyActive) {
+    if (k === 'e' || k === 'у') { e.preventDefault(); lobbySelectClass(); }
+    return;
+  }
   if (k === 'shift') tryDash();
   if (k === '1') tryAbility1();
   if (k === '2') tryAbility2();

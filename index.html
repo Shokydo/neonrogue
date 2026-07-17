@@ -12,21 +12,10 @@
 
 <div id="start">
   <h1>NEON ROGUE</h1>
-  <p>// ВЫБЕРИ КЛАСС //</p>
-  <div id="classSelect">
-    <button class="classBtn" style="border-color:#f0f; color:#f0f" onmouseover="playSound('ui_hover')" onclick="startMission('melee')">
-      <span class="cname">ЭДЖРАННЕР</span>
-      <span class="cdesc">Ближний бой, высокий урон<br>SHIFT-РЫВОК  ЛКМ-РАЗРЕЗ  ПКМ-НОЖИ  3-МЕЧИ</span>
-    </button>
-    <button class="classBtn" style="border-color:#a0f; color:#a0f" onmouseover="playSound('ui_hover')" onclick="startMission('magic')">
-      <span class="cname">НЕТРАННЕР</span>
-      <span class="cdesc">Взлом, кибернетика<br>SHIFT-РЫВОК  1-ВЗЛОМ  2-ДЕМОН  3-СТЕНА</span>
-    </button>
-    <button class="classBtn" style="border-color:#ff0; color:#ff0" onmouseover="playSound('ui_hover')" onclick="startMission('tech')">
-      <span class="cname">ТЕХНИК</span>
-      <span class="cdesc">Пистолет, щит, гаджеты<br>SHIFT-РЫВОК  ЛКМ-ПИСТОЛЕТ  ПКМ-ЩИТ  1-ТУРЕЛЬ  2-ДРОН  3-МЕХ</span>
-    </button>
-  </div>
+  <p>// 2077 //</p>
+  <button id="playBtn" class="classBtn" style="border-color:#0ff; color:#0ff; width:240px; text-align:center; margin-top:30px;" onmouseover="playSound('ui_hover')" onclick="enterLobby()">
+    <span class="cname" style="font-size:24px;">ИГРАТЬ</span>
+  </button>
 </div>
 
 <canvas id="game" width="960" height="600"></canvas>
@@ -119,22 +108,17 @@
 
 <div id="yt-player" style="position:absolute;top:-9999px;left:-9999px;"></div>
 <div id="fade-overlay"></div>
-<div id="lobby-room">
-  <div class="lobby-bg"></div>
-  <div class="lobby-rain"></div>
-  <div class="lobby-furniture">
-    <div class="lobby-terminal">
-      <div class="terminal-screen">
-        <div class="terminal-line">> SYSTEM BOOT...</div>
-        <div class="terminal-line">> SECTOR 7: ONLINE</div>
-        <div class="terminal-line">> MISSION: NEON ROGUE</div>
-        <div class="terminal-line blink">> ОЖИДАНИЕ ПОЕЗДА...</div>
-      </div>
-    </div>
-    <div class="lobby-shelf"></div>
-    <div class="lobby-neon-sign">SECTOR 7</div>
+<div id="lobby-hud">
+  <div id="lobby-hint">WASD — ДВИЖЕНИЕ &nbsp;|&nbsp; E — ВЫБРАТЬ КЛАСС</div>
+  <div id="lobby-class-label"></div>
+</div>
+<div id="metro-sequence">
+  <div class="metro-tunnel"></div>
+  <div class="metro-platform">
+    <div class="metro-sign">СТАНЦИЯ: СЕКТОР 7</div>
+    <div class="metro-train-arriving"></div>
   </div>
-  <div class="lobby-status">ПОЕЗД ПРИБЫВАЕТ...</div>
+  <h2 class="metro-text">СЕДЛАЙСЯ. ПОЕЗД ОТПРАВЛЯЕТСЯ...</h2>
 </div>
 <div id="train-sequence">
   <div class="train-window">
@@ -152,6 +136,7 @@
 <script src="js/combat.js"></script>
 <script src="js/update.js"></script>
 <script src="js/render.js"></script>
+<script src="js/lobby.js"></script>
 <script src="js/main.js"></script>
 <script src="https://www.youtube.com/iframe_api"></script>
 </body>

@@ -21,49 +21,6 @@ function changeMusic(videoId) {
   }
 }
 
-// --- Train Transition ---
-function startMission(cls) {
-  initAudio();
-  playSound('ui_click');
-
-  const fade = document.getElementById('fade-overlay');
-  const lobby = document.getElementById('start');
-  const room = document.getElementById('lobby-room');
-  const train = document.getElementById('train-sequence');
-
-  // 1. Затемняем лобби (выбор класса)
-  fade.style.opacity = '1';
-
-  setTimeout(() => {
-    lobby.style.display = 'none';
-    room.style.display = 'flex';
-    fade.style.opacity = '0';
-
-    // 2. Показываем комнату лобби 5 сек
-    setTimeout(() => {
-      fade.style.opacity = '1';
-
-      setTimeout(() => {
-        room.style.display = 'none';
-        train.style.display = 'flex';
-        fade.style.opacity = '0';
-
-        // 3. Поезд 4.5 сек
-        setTimeout(() => {
-          fade.style.opacity = '1';
-
-          setTimeout(() => {
-            train.style.display = 'none';
-            fade.style.opacity = '0';
-            startGame(cls);
-            changeMusic(MUSIC_GAME);
-          }, 1500);
-        }, 4500);
-      }, 1500);
-    }, 5000);
-  }, 1500);
-}
-
 function loop() {
   update(); draw();
   if (gameRunning) requestAnimationFrame(loop); else draw();
@@ -98,7 +55,7 @@ function pointLineDist(px, py, x1, y1, x2, y2) {
 
 window.loop = loop;
 window.startGame = startGame;
-window.startMission = startMission;
+window.enterLobby = enterLobby;
 window.throwKnife = throwKnife;
 window.tryAbility1 = tryAbility1;
 window.tryAbility2 = tryAbility2;
