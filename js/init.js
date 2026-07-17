@@ -11,6 +11,11 @@
 }
 
 function initWorld() {
+  if (!player) player = { x: 0, y: 0, hp: 100, maxHp: 100 };
+  if (typeof enemyTypes === 'undefined') {
+    console.warn('enemyTypes is not defined yet');
+    return;
+  }
   player.x = WORLD_W/2; player.y = WORLD_H/2;
   camera.x = player.x - W/2; camera.y = player.y - H/2;
   enemies = []; projectiles = []; particles = []; pickups = []; damageTexts = [];

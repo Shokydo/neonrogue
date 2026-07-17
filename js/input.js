@@ -1,13 +1,16 @@
 ﻿// Глобальные переменные для инпута (чтобы lobby.js видел их независимо от порядка загрузки)
 window.isRebinding = window.isRebinding ?? false;
 window.keys = window.keys ?? {};
-let isRebinding = window.isRebinding;
-let keys = window.keys;
+// Не делаем top-level redeclare: isRebinding/keys читаем напрямую из window
+// (иначе при повторной оценке скрипта падает с "already been declared")
+// let isRebinding = window.isRebinding;
+// let keys = window.keys;
 
 document.addEventListener('keydown', e => {
-    if (isRebinding) return;
+    const isRebindingLocal = window.isRebinding;
+    if (isRebindingLocal) return;
     const k = e.key.toLowerCase();
-    keys[k] = true;
+    window.keys[k] = true;
 
     if (typeof lobbyActive !== 'undefined' && lobbyActive) {
         if (k === 'escape') {
@@ -42,7 +45,7 @@ document.addEventListener('keydown', e => {
 
 document.addEventListener('keyup', e => {
     const k = e.key.toLowerCase();
-    keys[k] = false;
+    window.keys[k] = false;
 });
 
 // Инициализация мыши ТОЛЬКО после полной загрузки HTML
@@ -53,10 +56,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // mouse может быть создан в bootstrap, но если его нет — создаём безопасно
+    if (typeof mouse === 'undefined' || !mouse) {
+        // eslint-disable-next-line no-undef
+        window.mouse = window.mouse ?? { x: 0, y: 0, down: false };
+    }
+
     cv.addEventListener('mousemove', e => {
         const r = cv.getBoundingClientRect();
-        mouse.x = (e.clientX - r.left) * (W / r.width) + (typeof camera !== 'undefined' ? camera.x : 0);
-        mouse.y = (e.clientY - r.top) * (H / r.height) + (typeof camera !== 'undefined' ? camera.y : 0);
+        const m = window.mouse;
+        if (!m) return;
+        m.x = (e.clientX - r.left) * ((typeof W !== 'undefined' ? W : 800) / r.width) + (typeof camera !== 'undefined' ? camera.x : 0);
+        m.y = (e.clientY - r.top) * ((typeof H !== 'undefined' ? H : 600) / r.height) + (typeof camera !== 'undefined' ? camera.y : 0);
     });
 
     cv.addEventListener('mousedown', e => {

@@ -42,6 +42,13 @@ let selectedUIElement = null;
 let isDragging = false;
 let dragOffsetX = 0, dragOffsetY = 0;
 
+// Флаги меню должны быть доступны из input/main/lobby независимо от порядка загрузки
+window.settingsOpen = window.settingsOpen ?? false;
+window.skillMenuOpen = window.skillMenuOpen ?? false;
+window.pauseOpen = window.pauseOpen ?? false;
+window.gamePaused = window.gamePaused ?? false;
+
+
 function loadSettings() {
   const saved = localStorage.getItem('neonRogueSettings');
   if (saved) {
@@ -105,25 +112,39 @@ function saveSettingsAndClose() {
 }
 
 function toggleSettings() {
-  settingsOpen = !settingsOpen;
+  window.settingsOpen = !window.settingsOpen;
+
   const menu = document.getElementById('settingsMenu');
-  if (settingsOpen) {
-    if (skillMenuOpen) toggleSkillMenu();
-    if (pauseOpen) { pauseOpen = false; document.getElementById('pauseMenu').classList.remove('show'); }
+  if (!menu) return;
+
+  if (window.settingsOpen) {
+    if (window.skillMenuOpen && typeof toggleSkillMenu === 'function') toggleSkillMenu();
+    if (window.pauseOpen) {
+      window.pauseOpen = false;
+      const pMenu = document.getElementById('pauseMenu');
+      if (pMenu) pMenu.classList.remove('show');
+    }
+
     menu.classList.add('show');
-    gamePaused = true;
-    playSound('ui_menu_open');
+    window.gamePaused = true;
+    if (typeof playSound === 'function') playSound('ui_menu_open');
   } else {
     menu.classList.remove('show');
-    gamePaused = false;
-    playSound('ui_menu_close');
+    window.gamePaused = false;
+    if (typeof playSound === 'function') playSound('ui_menu_close');
   }
+
+  // подстраховка: синхронизируем локальные переменные (если они где-то объявлены)
+  if (typeof gamePaused !== 'undefined') gamePaused = window.gamePaused;
 }
 
 function openSettingsFromPause() {
-  pauseOpen = false;
-  gamePaused = false;
-  document.getElementById('pauseMenu').classList.remove('show');
+  window.pauseOpen = false;
+  window.gamePaused = false;
+  const pMenu = document.getElementById('pauseMenu');
+  if (pMenu) pMenu.classList.remove('show');
+
+  if (typeof gamePaused !== 'undefined') gamePaused = window.gamePaused;
   toggleSettings();
 }
 

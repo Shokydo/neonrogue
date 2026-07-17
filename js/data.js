@@ -1,10 +1,16 @@
-const W = 800;
-// const H = 600; // fixed: prevent Identifier 'H' redeclaration (use window.H below)
-let gameRunning = false;
-let gamePaused = false;
-let keys = {};
+// W/H объявляем безопасно, чтобы не ловить redeclare при повторной загрузке data.js
+// (другие модули/скрипты могут переоценивать data.js)
+var W = (typeof window !== 'undefined' && typeof window.W !== 'undefined') ? window.W : (typeof window !== 'undefined' && typeof window.__DEFAULT_W !== 'undefined' ? window.__DEFAULT_W : 800);
+var H = (typeof window !== 'undefined' && typeof window.H !== 'undefined') ? window.H : 600;
+let gameRunning = window.gameRunning ?? false;
+let gamePaused = window.gamePaused ?? false;
+
+let keys = window.keys || {};
 let isRebinding = false;
-let mouse = { x: W / 2, y: (typeof window !== 'undefined' ? window.H : 600) / 2, down: false };
+let mouse = { x: W / 2, y: H / 2, down: false };
+
+// Если скрипт подгружается повторно, H/W не должны падать из-за redeclare.
+// Поэтому W/H объявлены через var, а значения синхронизируются через window выше.
 let playerClass = 'melee';
 let camera = { x: 0, y: 0 };
 
@@ -16,7 +22,7 @@ let camera = { x: 0, y: 0 };
 // W/H не переопределяем (H мог быть закомментирован для фикса redeclaration)
 if (typeof window !== 'undefined') {
   window.W = W;
-  window.H = typeof window.H !== 'undefined' ? window.H : 600;
+  window.H = H;
 }
 
 // If evaluated twice, keep the same keys object.
@@ -46,6 +52,9 @@ const classes = {
   netrunner: { name:'NETRUNNER', type:'HACKER', color:'#a0f', attackCd:55, dmg:45, range:220, qName:'DASH', eName:'METEOR', qCd:90, eCd:360, a1Name:'SYSTEM BREAK', a2Name:'CYBER DEMON', ultName:'BLACK WALL', ultCd:360 },
   tech: { name:'TECHNIC', type:'PILOT/DRONE', color:'#ff0', attackCd:32, dmg:30, range:500, qName:'DASH', eName:'SHIELD', qCd:90, eCd:180, a1Name:'TURRET', a2Name:'COMBAT DRONE', ultName:'EXOSUIT', ultCd:1500 }
 };
+
+// Экспортируем в window, чтобы init.js мог обращаться без «undefined»
+if (typeof window !== 'undefined') window.classes = window.classes || classes;
 
 let enemies = [], projectiles = [], particles = [], pickups = [], damageTexts = [];
 let grenades = [], lasers = [], lightningChains = [];
@@ -105,6 +114,9 @@ const enemyTypes = [
   { name:'JUMPER', color:'#a0f', hp:40, speed:1.8, size:10, dmg:15, xp:20, attack:'melee', dmgVar:6 },
   { name:'SPEEDSTER', color:'#ff0', hp:15, speed:2.8, size:8, dmg:12, xp:8, attack:'melee', dmgVar:4 }
 ];
+
+// Экспортируем в window, чтобы init.js мог обращаться без «undefined»
+if (typeof window !== 'undefined') window.enemyTypes = window.enemyTypes || enemyTypes;
 
 const TOWER_TYPE = { name:'БАШНЯ', color:'#f80', hp:120, speed:0, size:22, dmg:0, xp:20, attack:'ranged', dmgVar:0, tower:true };
 
