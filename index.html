@@ -104,14 +104,37 @@
 </div>
 
 <div id="skillMenu">
-  <h2>ПРОКАЧКА</h2>
-  <div class="skill-points">ОЧКИ: <span id="skillPoints">0</span></div>
-  <div id="skillTabs">
-    <button id="tabAbilities" onclick="switchSkillTab('abilities')" type="button">СПОСОБНОСТИ</button>
-    <button id="tabAttack" onclick="switchSkillTab('attack')" type="button">АТАКА (ЛКМ)</button>
+  <h2>СИСТЕМА МОДИФИКАЦИИ</h2>
+  <div class="skill-points">ДОСТУПНО ОЧКОВ: <span id="menuSkillPoints" style="color: var(--neon-yellow)">0</span></div>
+
+  <div class="upgrade-nav">
+    <button class="nav-arrow left" onclick="changeUpgradePage(-1)">◄</button>
+    <div class="page-indicator">
+      <span id="currentPage">1</span> / <span id="totalPages">4</span>
+    </div>
+    <button class="nav-arrow right" onclick="changeUpgradePage(1)">►</button>
   </div>
-  <div class="skill-columns" id="skillColumns"></div>
-  <div class="close-hint">Нажми E чтобы закрыть</div>
+
+  <div class="upgrade-pages">
+    <div class="upgrade-page active" data-page="1">
+      <h3 class="page-title">УЛУЧШЕНИЕ СПОСОБНОСТЕЙ</h3>
+      <div class="upgrades-grid" id="abilitiesUpgrades"></div>
+    </div>
+    <div class="upgrade-page" data-page="2">
+      <h3 class="page-title">УЛУЧШЕНИЕ КЛИКОВ</h3>
+      <div class="upgrades-grid" id="clicksUpgrades"></div>
+    </div>
+    <div class="upgrade-page" data-page="3">
+      <h3 class="page-title">КИБЕР-ИМПЛАНТЫ</h3>
+      <div class="upgrades-grid" id="implantsUpgrades"></div>
+    </div>
+    <div class="upgrade-page" data-page="4">
+      <h3 class="page-title">МОДИФИКАЦИЯ ОРУЖИЯ</h3>
+      <div class="upgrades-grid" id="weaponUpgrades"></div>
+    </div>
+  </div>
+
+  <button class="close-btn" onclick="toggleSkillMenu()">ЗАКРЫТЬ [E]</button>
 </div>
 
 <div id="crt-overlay"></div>
@@ -138,6 +161,7 @@
 <script src="js/combat.js"></script>
 <script src="js/update.js"></script>
 <script src="js/render.js"></script>
+<script src="js/upgrades.js"></script>
 <script src="js/lobby.js"></script>
 <script src="js/main.js"></script>
 <script src="https://www.youtube.com/iframe_api"></script>

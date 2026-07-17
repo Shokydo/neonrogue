@@ -6,7 +6,7 @@
     playSound('ui_menu_open');
     gamePaused = true;
     menu.classList.add('show');
-    renderSkillTree();
+    initUpgradeMenu();
   } else {
     playSound('ui_menu_close');
     gamePaused = false;
