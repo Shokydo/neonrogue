@@ -1,7 +1,8 @@
 // --- LOBBY STATE ---
 let lobbyActive = false;
 let lobbySelectedClass = null;
-let lobbyPlayer = { x: 0, y: 0, size: 18, speed: 3.5 };
+// ДОБАВЛЕНО: angle для поворота головы/глаз
+let lobbyPlayer = { x: 0, y: 0, size: 18, speed: 3.5, angle: Math.PI / 2 };
 const LOBBY_W = 800;
 const LOBBY_H = 600;
 const LOBBY_WALL = 40;
@@ -30,6 +31,7 @@ function enterLobby() {
     lobbySelectedClass = null;
     lobbyPlayer.x = LOBBY_W / 2;
     lobbyPlayer.y = LOBBY_H / 2;
+    lobbyPlayer.angle = Math.PI / 2; // Сброс угла при входе
     lobbyParticles = [];
     for (let i = 0; i < 30; i++) {
       lobbyParticles.push({
@@ -41,7 +43,6 @@ function enterLobby() {
     }
     fade.style.opacity = '0';
 
-    // Анти-дубль: чтобы lobbyLoop не стартовал несколько раз и не ускорял движение/анимации
     window.__lobbyLoopStarted = window.__lobbyLoopStarted ?? false;
     if (!window.__lobbyLoopStarted) {
       window.__lobbyLoopStarted = true;
@@ -64,7 +65,12 @@ function lobbyUpdate() {
   if (keys['s'] || keys['ы']) dy += 1;
   if (keys['a'] || keys['ф']) dx -= 1;
   if (keys['d'] || keys['в']) dx += 1;
-  if (dx !== 0 && dy !== 0) { dx *= 0.707; dy *= 0.707; }
+  
+  // ДОБАВЛЕНО: Расчет угла поворота для отрисовки глаз
+  if (dx !== 0 || dy !== 0) {
+    p.angle = Math.atan2(dy, dx);
+    if (dx !== 0 && dy !== 0) { dx *= 0.707; dy *= 0.707; }
+  }
 
   const nx = p.x + dx * p.speed;
   const ny = p.y + dy * p.speed;
@@ -161,21 +167,38 @@ function lobbyDraw() {
   }
   ctx.globalAlpha = 1;
 
+  // --- ИЗМЕНЕННАЯ ОТРИСОВКА ИГРОКА (Единая система) ---
   const p = lobbyPlayer;
-  ctx.fillStyle = '#ffffff';
+  const isMoving = (keys['w'] || keys['a'] || keys['s'] || keys['d'] || keys['ц'] || keys['ф'] || keys['в'] || keys['ы']);
+  const p3DTime = Date.now() * 0.006;
+  const pBob = isMoving ? Math.sin(p3DTime * 2.5) * 3 : Math.sin(p3DTime * 1.2) * 1.5;
+  
+  const renderY = p.y + pBob;
+  const bodySize = 24;
+  const headSize = 12;
+  const color = '#ffffff'; // Строго белый
+  const armLen = 0;        // Без рук
+
+  // Вызов функции из render.js
+  drawChar2D(p.x, renderY, bodySize, headSize, color, p.angle, armLen, true);
+
+  // Неоновая обводка лобби (адаптирована под новую высоту персонажа)
+  ctx.save();
   ctx.shadowColor = '#00f3ff';
   ctx.shadowBlur = 15;
-  ctx.fillRect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
-  ctx.shadowBlur = 0;
   ctx.strokeStyle = '#00f3ff';
   ctx.lineWidth = 1.5;
-  ctx.strokeRect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
+  ctx.strokeRect(p.x - bodySize / 2, renderY - bodySize, bodySize, bodySize + headSize);
+  ctx.shadowBlur = 0;
+  ctx.restore();
 
+  // Подпись "ТЫ" (адаптирована под новую высоту)
   ctx.fillStyle = '#00f3ff';
   ctx.font = '10px "Share Tech Mono", monospace';
   ctx.textAlign = 'center';
-  ctx.fillText('ТЫ', p.x, p.y - p.size/2 - 8);
+  ctx.fillText('ТЫ', p.x, renderY - bodySize - headSize - 8);
   ctx.textAlign = 'left';
+  // -------------------------------------------------------
 
   const signPulse = 0.7 + 0.3 * Math.sin(lobbyNeonTimer * 2);
   ctx.globalAlpha = signPulse;
@@ -197,7 +220,6 @@ function lobbySelectClass() {
   playSound('ui_click');
   lobbyActive = false;
 
-  // Сбрасываем флаг RAF-цикла лобби, чтобы следующий заход снова запустил ровно один loop
   window.__lobbyLoopStarted = false;
 
   const fade = document.getElementById('fade-overlay');

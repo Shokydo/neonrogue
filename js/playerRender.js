@@ -86,13 +86,13 @@
     const headSize = 20;
 
     // в текущей логике рука/оружие зависит от класса
-    const armLen = playerClass === 'melee' ? 18 : 14;
+    const armLen = playerClass === 'edgerunner' ? 18 : 14;
 
     ctx.save();
     drawChar2D(px, py, bodySize, headSize, classes[playerClass].color, player.angle, armLen, true);
 
     // Дополнительные эффекты классов
-    if (playerClass === 'melee') {
+    if (playerClass === 'edgerunner') {
       const mwX = px + Math.cos(player.angle) * (4 + armLen);
       const mwY = py - bodySize * 0.5 + Math.sin(player.angle) * 4;
       ctx.fillStyle = classes[playerClass].color;
