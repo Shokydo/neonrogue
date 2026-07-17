@@ -1,8 +1,13 @@
-﻿let gameRunning = false;
+﻿// === ИСПРАВЛЕНИЕ: Объявляем W и H ДО их использования ===
+const W = 800;  // Ширина canvas по умолчанию
+const H = 600;  // Высота canvas по умолчанию
+
+let gameRunning = false;
 let gamePaused = false;
 let keys = {};
-let mouse = {x:W/2, y:H/2, down:false};
-let playerClass = 'edgerunner';
+let isRebinding = false; // Перенесено сюда, чтобы не дублировать
+let mouse = { x: W/2, y: H/2, down: false };
+let playerClass = 'melee';
 
 let camera = { x: 0, y: 0 };
 const WORLD_W = 4000;
@@ -108,7 +113,6 @@ const IMPLANT_TYPES = [
 let pendingPickup = null;
 let skillMenuOpen = false;
 let settingsOpen = false;
-let isRebinding = false;
 
 const attackTrees = {
   melee: [
