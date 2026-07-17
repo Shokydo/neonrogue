@@ -1,6 +1,4 @@
-﻿let isRebinding = false;
-
-document.addEventListener('keydown', e => {
+﻿document.addEventListener('keydown', e => {
   if (isRebinding) return;
   const k = e.key.toLowerCase();
   keys[k] = true;
@@ -39,37 +37,43 @@ document.addEventListener('keyup', e => {
   const k = e.key.toLowerCase();
   keys[k] = false;
 });
-cv.addEventListener('mousemove', e => {
-  const r = cv.getBoundingClientRect();
-  mouse.x = (e.clientX - r.left) * (W / r.width) + camera.x;
-  mouse.y = (e.clientY - r.top) * (H / r.height) + camera.y;
-});
-cv.addEventListener('mousedown', e => {
-  if (e.button === 0) {
-    mouse.down = true;
-  }
-  if (e.button === 2) {
-    e.preventDefault();
-    if (playerClass === 'melee') {
-      throwKnife();
-    } else if (playerClass === 'tech') {
-      techieShield.active = true;
-      techieShield.broken = false;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const cv = document.getElementById('game');
+  if (!cv) { console.error('Canvas #game not found'); return; }
+
+  cv.addEventListener('mousemove', e => {
+    const r = cv.getBoundingClientRect();
+    mouse.x = (e.clientX - r.left) * (W / r.width) + camera.x;
+    mouse.y = (e.clientY - r.top) * (H / r.height) + camera.y;
+  });
+  cv.addEventListener('mousedown', e => {
+    if (e.button === 0) {
+      mouse.down = true;
     }
-  }
-});
-cv.addEventListener('mouseup', e => {
-  if (e.button === 0) {
-    mouse.down = false;
-  }
-  if (e.button === 2) {
-    if (playerClass === 'tech') {
-      techieShield.active = false;
-      if (techieShield.hp <= 0) {
-        techieShield.broken = true;
-        techieShield.cooldown = 180;
+    if (e.button === 2) {
+      e.preventDefault();
+      if (playerClass === 'melee') {
+        throwKnife();
+      } else if (playerClass === 'tech') {
+        techieShield.active = true;
+        techieShield.broken = false;
       }
     }
-  }
+  });
+  cv.addEventListener('mouseup', e => {
+    if (e.button === 0) {
+      mouse.down = false;
+    }
+    if (e.button === 2) {
+      if (playerClass === 'tech') {
+        techieShield.active = false;
+        if (techieShield.hp <= 0) {
+          techieShield.broken = true;
+          techieShield.cooldown = 180;
+        }
+      }
+    }
+  });
+  cv.addEventListener('contextmenu', e => e.preventDefault());
 });
-cv.addEventListener('contextmenu', e => e.preventDefault());
