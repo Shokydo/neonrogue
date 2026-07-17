@@ -660,11 +660,11 @@ function checkLevelUp() {
   let safetyCounter = 0;
   while (player.xp >= player.xpNext && safetyCounter < 100) {
     player.xp -= player.xpNext; player.level++;
-    if (player.level % 2 === 0) player.skillPoints++;
+    player.skillPoints++;
     player.xpNext = Math.max(50, Math.floor(player.xpNext * 1.4));
     applyImplantStats();
     player.hp = player.maxHp;
-    showMsg('УРОВЕНЬ ' + player.level + (player.level % 2 === 0 ? '! +1 ОЧКО' : ''), '#ff0');
+    showMsg('УРОВЕНЬ ' + player.level + '! +1 ОЧКО', '#ff0');
     playSound('levelup');
     shake = 8; safetyCounter++;
   }
