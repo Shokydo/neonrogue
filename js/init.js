@@ -76,12 +76,23 @@ function generateWorldObjects() {
 }
 
 function updateClassUI() {
-  const c = classes[playerClass];
-  document.getElementById('wName').textContent = c.name; document.getElementById('wName').style.color = c.color;
-  document.getElementById('wType').textContent = c.type; document.getElementById('wType').style.color = c.color;
-  document.getElementById('ab1Name').textContent = c.a1Name;
-  document.getElementById('ab2Name').textContent = c.a2Name;
-  document.getElementById('abRName').textContent = c.ultName;
+    const c = classes ? classes[playerClass] : undefined;
+    
+    if (!c) {
+        console.error("КРИТИЧЕСКАЯ ОШИБКА: Класс не найден!", { 
+            playerClass: playerClass, 
+            availableClasses: classes ? Object.keys(classes) : "объект classes не определен" 
+        });
+        return;
+    }
+
+    document.getElementById('wName').textContent = c.name; 
+    document.getElementById('wName').style.color = c.color;
+    document.getElementById('wType').textContent = c.type; 
+    document.getElementById('wType').style.color = c.color;
+    document.getElementById('ab1Name').textContent = c.a1Name;
+    document.getElementById('ab2Name').textContent = c.a2Name;
+    document.getElementById('abRName').textContent = c.ultName;
 }
 
 function spawnEnemy() {

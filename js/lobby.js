@@ -7,9 +7,9 @@ const LOBBY_H = 600;
 const LOBBY_WALL = 40;
 
 const lobbyZones = [
-  { cls:'melee', label:'ЭДЖРАННЕР', color:'#f0f', desc:'БЛИЖНИЙ БОЙ',
+  { cls:'edgerunner', label:'ЭДЖРАННЕР', color:'#f0f', desc:'БЛИЖНИЙ БОЙ',
     x:100, y:80, w:180, h:130 },
-  { cls:'magic', label:'НЕТРАННЕР', color:'#a0f', desc:'ВЗЛОМ И МАГИЯ',
+  { cls:'netrunner', label:'НЕТРАННЕР', color:'#a0f', desc:'ВЗЛОМ И МАГИЯ',
     x:520, y:80, w:180, h:130 },
   { cls:'tech',  label:'ТЕХНИК',    color:'#ff0', desc:'ПИСТОЛЕТ И ГАДЖЕТЫ',
     x:310, y:400, w:180, h:130 }
