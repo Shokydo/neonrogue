@@ -28,25 +28,39 @@ function startMission(cls) {
 
   const fade = document.getElementById('fade-overlay');
   const lobby = document.getElementById('start');
+  const room = document.getElementById('lobby-room');
   const train = document.getElementById('train-sequence');
 
+  // 1. Затемняем лобби (выбор класса)
   fade.style.opacity = '1';
 
   setTimeout(() => {
     lobby.style.display = 'none';
-    train.style.display = 'flex';
+    room.style.display = 'flex';
     fade.style.opacity = '0';
 
+    // 2. Показываем комнату лобби 5 сек
     setTimeout(() => {
       fade.style.opacity = '1';
 
       setTimeout(() => {
-        train.style.display = 'none';
+        room.style.display = 'none';
+        train.style.display = 'flex';
         fade.style.opacity = '0';
-        startGame(cls);
-        changeMusic(MUSIC_GAME);
+
+        // 3. Поезд 4.5 сек
+        setTimeout(() => {
+          fade.style.opacity = '1';
+
+          setTimeout(() => {
+            train.style.display = 'none';
+            fade.style.opacity = '0';
+            startGame(cls);
+            changeMusic(MUSIC_GAME);
+          }, 1500);
+        }, 4500);
       }, 1500);
-    }, 4500);
+    }, 5000);
   }, 1500);
 }
 

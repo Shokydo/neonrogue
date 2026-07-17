@@ -348,3 +348,73 @@ body {
   0%, 100% { opacity: 0.7; }
   50% { opacity: 1; text-shadow: 0 0 25px var(--neon-cyan); }
 }
+
+/* --- КОМНАТА ЛОББИ --- */
+#lobby-room {
+  display: none; position: fixed; inset: 0; z-index: 390;
+  background: #080812; overflow: hidden;
+  flex-direction: column; align-items: center; justify-content: center;
+}
+
+.lobby-bg {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, #0a0a1a 0%, #050510 40%, #1a0b2e 100%),
+    repeating-linear-gradient(0deg, transparent 0, transparent 79px, rgba(0,243,255,0.03) 79px, rgba(0,243,255,0.03) 80px),
+    repeating-linear-gradient(90deg, transparent 0, transparent 79px, rgba(0,243,255,0.03) 79px, rgba(0,243,255,0.03) 80px);
+}
+
+.lobby-rain {
+  position: absolute; inset: 0;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="30"><line x1="2" y1="0" x2="1" y2="15" stroke="rgba(255,255,255,0.08)" stroke-width="1"/></svg>');
+  animation: rain-fall 0.8s linear infinite;
+  opacity: 0.4;
+}
+
+.lobby-furniture { position: relative; z-index: 1; width: 80%; max-width: 700px; }
+
+.lobby-terminal {
+  width: 280px; height: 160px; margin: 0 auto 30px;
+  background: #0a0a0a; border: 2px solid #1a3a2a; border-radius: 8px;
+  padding: 12px; box-shadow: 0 0 30px rgba(0,255,100,0.1), inset 0 0 20px rgba(0,0,0,0.8);
+  position: relative;
+}
+.lobby-terminal::before {
+  content: ''; position: absolute; inset: 0; border-radius: 8px;
+  background: linear-gradient(180deg, rgba(0,255,100,0.03) 0%, transparent 100%);
+  pointer-events: none;
+}
+.terminal-screen { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: #0f6; }
+.terminal-line { margin: 4px 0; opacity: 0.8; }
+.terminal-line.blink { animation: terminal-blink 1.5s infinite; }
+
+.lobby-shelf {
+  width: 200px; height: 6px; margin: 0 auto 40px;
+  background: linear-gradient(90deg, transparent, #2a1a3a, #1a2a4a, transparent);
+  border-radius: 3px; box-shadow: 0 0 15px rgba(100,0,200,0.3);
+}
+
+.lobby-neon-sign {
+  font-family: 'Orbitron', sans-serif; font-size: 48px; font-weight: 900;
+  color: var(--neon-cyan); text-align: center;
+  text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan), 0 0 80px rgba(0,243,255,0.3);
+  animation: neon-flicker 4s infinite;
+  margin-bottom: 30px;
+}
+
+.lobby-status {
+  position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);
+  font-family: 'Orbitron', sans-serif; font-size: 16px; letter-spacing: 4px;
+  color: var(--neon-yellow); text-shadow: 0 0 10px var(--neon-yellow);
+  animation: pulse-text 2s infinite ease-in-out;
+  z-index: 1;
+}
+
+@keyframes terminal-blink {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.3; }
+}
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+  20%, 24%, 55% { opacity: 0.6; }
+}
