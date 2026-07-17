@@ -243,7 +243,7 @@ function draw() {
   projectiles.forEach(p => {
     const px = p.x - camera.x, py = p.y - camera.y;
     ctx.fillStyle = p.color; ctx.shadowColor = p.color; ctx.shadowBlur = 15;
-    if (p.type === 'magic') {
+    if (p.type === 'netrunner') {
       ctx.beginPath(); ctx.arc(px, py, p.size, 0, Math.PI*2); ctx.fill();
       ctx.globalAlpha = 0.4; ctx.beginPath(); ctx.arc(px, py, p.size*2, 0, Math.PI*2); ctx.fill(); ctx.globalAlpha = 1;
     } else { 
@@ -340,7 +340,7 @@ function draw() {
     ctx.fillStyle = classes[playerClass].color; ctx.shadowColor = classes[playerClass].color; ctx.shadowBlur = 8;
     ctx.fillRect(mwX - 3, mwY - 3, 6, 6);
     ctx.shadowBlur = 0;
-  } else if (playerClass === 'magic') {
+  } else if (playerClass === 'netrunner') {
     // ИСПРАВЛЕНО: КВАДРАТНОЕ свечение вместо круга (ctx.arc)
     const pulse = Math.sin(Date.now() * 0.008) * 0.3 + 0.7;
     ctx.save();

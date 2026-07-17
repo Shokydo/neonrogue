@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (e.button === 2) {
             e.preventDefault();
-            if (typeof playerClass !== 'undefined' && playerClass === 'melee') {
+            if (typeof playerClass !== 'undefined' && playerClass === 'edgerunner') {
                 if (typeof throwKnife === 'function') throwKnife();
             } else if (typeof playerClass !== 'undefined' && playerClass === 'tech') {
                 if (typeof techieShield !== 'undefined') {

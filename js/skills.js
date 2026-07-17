@@ -1,5 +1,5 @@
 ﻿const abilitiesData = {
-  melee: [
+  edgerunner: [
     { name:'ВРАЩ. КЛИНОК', color:'#00f3ff', nodes:[
       { cost:2, effect:{a1Dmg:0.15}, desc:'+15% УРОН ВРАЩЕНИЯ' },
       { cost:3, effect:{a1Radius:0.20}, desc:'+20% РАДИУС' },
@@ -31,7 +31,7 @@
       { cost:6, effect:{ultDuration:90, ultSlow:0.10}, desc:'+1.5 СЕК, +10% ЗАМЕДЛЕНИЕ' }
     ]}
   ],
-  magic: [
+  netrunner: [
     { name:'КИБЕР-ВЗЛОМ', color:'#ff00ff', nodes:[
       { cost:2, effect:{a1Dmg:0.15}, desc:'+15% УРОН ВЗЛОМА' },
       { cost:3, effect:{a1Radius:0.20}, desc:'+20% РАДИУС ВЗЛОМА' },
@@ -101,7 +101,7 @@ const abilityLevels = {};
 let currentAbility = 0;
 
 function resetAbilityLevels() {
-  for (const cls of ['melee','magic','tech']) {
+  for (const cls of ['edgerunner', 'netrunner','tech']) {
     abilityLevels[cls] = [];
     for (let a = 0; a < 3; a++) {
       abilityLevels[cls][a] = [0,0,0,0,0,0,0,0];

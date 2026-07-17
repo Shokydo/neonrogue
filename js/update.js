@@ -601,7 +601,7 @@ if (player.attackCd > 0) player.attackCd--;
 
 // Атака по зажатой ЛКМ
   if (mouse.down) {
-    if (playerClass === 'melee' || playerClass === 'magic') {
+    if (playerClass === 'edgerunner' || playerClass === 'netrunner') {
       tryAttack();
     } else if (playerClass === 'tech') {
       tryAttack();
@@ -789,14 +789,14 @@ if (player.attackCd > 0) player.attackCd--;
   projectiles.forEach(p => {
     p.x += p.vx; p.y += p.vy; p.life--;
     if (p.owner === 'player') {
-      if (p.type === 'magic') {
+      if (p.type === 'netrunner') {
         p.traveled += Math.hypot(p.vx, p.vy);
         if (p.traveled >= p.maxRange || p.life <= 1) { explode(p.x, p.y, 80, p.dmg, p.color); p.life = 0; return; }
       }
       enemies.forEach(e => {
         if (e.dead) return;
         if (dist(p.x,p.y,e.x,e.y) < e.size + p.size) {
-          if (p.type === 'magic') explode(p.x, p.y, 80, p.dmg, p.color); else damageEnemy(e, p.dmg);
+          if (p.type === 'netrunner') explode(p.x, p.y, 80, p.dmg, p.color); else damageEnemy(e, p.dmg);
           p.life = 0;
         }
       });
@@ -1226,7 +1226,7 @@ function updateUI() {
     document.getElementById('ab2Cd').style.display = ab2Pct < 1 ? 'block' : 'none';
     document.getElementById('ab2CdTxt').textContent = ab2Pct < 1 ? Math.ceil(player.abilityCd2 / 60) + 'с' : '';
     document.getElementById('ab2Cd').style.height = ((1 - ab2Pct) * 100) + '%';
-  } else if (playerClass === 'magic') {
+  } else if (playerClass == 'netrunner') {
     // НЕТРАННЕР: 1 - КИБЕР-ВЗЛОМ, 2 - КИБЕР-ДЕМОНЫ
     const ab1CdBase = 420;
     const ab1Pct = Math.max(0, 1 - player.abilityCd1 / ab1CdBase);
@@ -1262,8 +1262,8 @@ function updateUI() {
   document.getElementById('abRCd').style.height = ((1 - abRPct) * 100) + '%';
 
   document.getElementById('abShift').style.borderColor = abShiftPct >= 1 ? '#0ff' : '#333';
-  document.getElementById('ab1').style.borderColor = playerClass === 'tech' ? '#ff0' : (playerClass === 'magic' ? (player.abilityCd1 <= 0 ? '#a0f' : '#333') : (player.attackCd <= 0 ? '#f0f' : '#333'));
-  document.getElementById('ab2').style.borderColor = playerClass === 'melee' ? (edgerunnerKnifeCharges > 0 ? '#0ff' : '#f00') : (playerClass === 'magic' ? (player.abilityCd2 <= 0 ? '#a0f' : '#333') : '#333');
+  document.getElementById('ab1').style.borderColor = playerClass === 'tech' ? '#ff0' : (playerClass === 'netrunner' ? (player.abilityCd1 <= 0 ? '#a0f' : '#333') : (player.attackCd <= 0 ? '#f0f' : '#333'));
+  document.getElementById('ab2').style.borderColor = playerClass === 'melee' ? (edgerunnerKnifeCharges > 0 ? '#0ff' : '#f00') : (playerClass === 'netrunner' ? (player.abilityCd2 <= 0 ? '#a0f' : '#333') : '#333');
   document.getElementById('abR').style.borderColor = player.ultCharge >= player.ultMaxCharge ? '#ff0' : (abRPct >= 1 ? '#f0f' : '#333');
 }
 

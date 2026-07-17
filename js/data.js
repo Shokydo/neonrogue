@@ -7,7 +7,7 @@ const keys = window.keys ?? {};
 let isRebinding = window.isRebinding ?? false;
 const mouse = window.mouse ?? { x: W / 2, y: H / 2, down: false };
 
-let playerClass = 'melee';
+let playerClass = 'edgerunner';
 let camera = window.camera ?? { x: 0, y: 0 };
 const WORLD_W = 4000;
 const WORLD_H = 4000;
@@ -39,6 +39,16 @@ const classes = {
 if (typeof window !== 'undefined') window.classes = window.classes || classes;
 
 let enemies = [], projectiles = [], particles = [], pickups = [], damageTexts = [];
+
+// Экспортируем ссылки на массивы в window, чтобы внешние модули (например js/enemies.js)
+// модифицировали тот же самый массив, который читает update.js
+if (typeof window !== 'undefined') {
+  window.enemies = enemies;
+  window.projectiles = projectiles;
+  window.particles = particles;
+  window.pickups = pickups;
+  window.damageTexts = damageTexts;
+}
 let grenades = [], lasers = [], lightningChains = [];
 let turrets = [], turretProjectiles = [], burnZones = [], damageZones = [];
 let worldObjects = [], shake = 0, swordSwings = [], ability1Trails = [], ability1Impact = [];
@@ -51,7 +61,7 @@ let overloadedEnemies = [];
 let breachMarks = [];   
 let cyberDemons = [];   
 let hackedEnemies = []; 
-let scatterShotActive = 0, railgunBeams = [], meleeSwingDir = 1, isFloorTransition = false;
+let scatterShotActive = 0, railgunBeams = [], edgerunnerSwingDir = 1, isFloorTransition = false;
 
 // New variables for reworked abilities
 let edgerunnerKnives = []; // { x, y, vx, vy, dmg, life, angle, target }
@@ -120,7 +130,7 @@ let skillMenuOpen = false;
 let settingsOpen = false;
 
 const attackTrees = {
-  melee: [
+  edgerunner: [
     { title:'РАЗРЕЗ МЕЧОМ (ЛКМ)', skills:[
       { id:'m_atk_dmg', name:'ОСТРОТА', desc:'Урон базовой атаки +20%', cost:1, max:5, bonus:{ atkDmg:0.2 } },
       { id:'m_atk_speed', name:'БЫСТРОТА', desc:'Скорость атаки +15%', cost:1, max:5, bonus:{ atkSpeed:0.15 } },
@@ -133,7 +143,7 @@ const attackTrees = {
       { id:'m_atk_knockback', name:'ОТБРАСЫВАНИЕ', desc:'Враги отлетают назад при попадании', cost:2, max:1, flag:true },
     ]},
   ],
-  magic: [
+  netrunner: [
     { title:'МОНОСТРУНА (ЛКМ)', skills:[
       { id:'ma_atk_dmg', name:'СИЛА МОНОСТРУНЫ', desc:'Урон моноструны +20%', cost:1, max:5, bonus:{ atkDmg:0.2 } },
       { id:'ma_atk_speed', name:'БЫСТРАЯ СТРУНА', desc:'Скорость атаки +15%', cost:1, max:5, bonus:{ atkSpeed:0.15 } },
@@ -161,7 +171,7 @@ const attackTrees = {
 };
 
 const skillTrees = {
-  melee: [
+  edgerunner: [
     { title:'ВРАЩАЮЩИЙСЯ КЛИНОК (1)', skills:[
       { id:'e_a1_dmg', name:'ОСТРОТА КЛИНКОВ', desc:'Урон вращения +20%', cost:1, max:5, bonus:{ a1Dmg:0.2 } },
       { id:'e_a1_duration', name:'ДОЛГОЕ ВРАЩЕНИЕ', desc:'Длительность +0.5 сек', cost:1, max:3, bonus:{ a1Duration:30 } },
@@ -184,7 +194,7 @@ const skillTrees = {
       { id:'e_ult_freeze', name:'ВРЕМЕННАЯ ЛОВУШКА', desc:'Враги замирают на 0.5 сек', cost:3, max:1, flag:true },
     ]}
   ],
-  magic: [
+  netrunner: [
     { title:'КИБЕР-ВЗЛОМ (1)', skills:[
       { id:'ma_a1_dmg', name:'СИЛА ВЗЛОМА', desc:'Урон +20%', cost:1, max:5, bonus:{ a1Dmg:0.2 } },
       { id:'ma_a1_radius', name:'РАДИУС ВЗЛОМА', desc:'Радиус +25%', cost:1, max:3, bonus:{ a1Radius:0.25 } },

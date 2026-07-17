@@ -22,8 +22,13 @@ function changeMusic(videoId) {
 }
 
 function loop() {
+  // Анти-дубль: чтобы при повторном startGame()/init не было нескольких параллельных RAF-циклов
+  if (window.__loopStarted === false) {
+    window.__loopStarted = true;
+  }
   if (!gamePaused) { update(); draw(); }
-  if (gameRunning) requestAnimationFrame(loop); else draw();
+  if (gameRunning) requestAnimationFrame(loop);
+  else draw();
 }
 
 // --- Pause Menu ---
@@ -77,6 +82,7 @@ function pointLineDist(px, py, x1, y1, x2, y2) {
 }
 
 window.loop = loop;
+window.__loopStarted = window.__loopStarted ?? false;
 window.startGame = startGame;
 window.enterLobby = enterLobby;
 window.throwKnife = throwKnife;

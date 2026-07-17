@@ -10,10 +10,10 @@
   const atkCritChance = getAttackBonus('atkCrit');
   const atkCritDmg = 1 + getAttackBonus('atkCritDmg');
 
-  const hasPierce = getSkillLevel(playerClass === 'melee' ? 'm_atk_pierce' : (playerClass === 'magic' ? 'ma_atk_chain' : 't_atk_pierce')) > 0;
-  const hasLifesteal = getSkillLevel(playerClass === 'melee' ? 'm_atk_lifesteal' : null) > 0;
+  const hasPierce = getSkillLevel(playerClass === 'edgerunner' ? 'm_atk_pierce' : (playerClass === 'netrunner' ? 'ma_atk_chain' : 't_atk_pierce')) > 0;
+  const hasLifesteal = getSkillLevel(playerClass === 'edgerunner' ? 'm_atk_lifesteal' : null) > 0;
   const atkLifesteal = getAttackBonus('atkLifesteal');
-  const hasDouble = getSkillLevel(playerClass === 'melee' ? 'm_atk_double' : (playerClass === 'magic' ? 'ma_atk_double' : 't_atk_overheat')) > 0;
+  const hasDouble = getSkillLevel(playerClass === 'edgerunner' ? 'm_atk_double' : (playerClass === 'netrunner' ? 'ma_atk_double' : 't_atk_overheat')) > 0;
 
   player.attackCd = Math.floor(stats.attackCd / Math.max(0.6, atkSpeedBonus));
   player.angle = Math.atan2(mouse.y - player.y, mouse.x - player.x);
@@ -34,7 +34,7 @@
     return false;
   };
 
-  if (playerClass === 'melee') {
+  if (playerClass === 'edgerunner') {
     // ЭДЖРАННЕР - ЛКМ: Анимированный разрез мечом
     edgerunnerSlashAnim = 12; // длительность анимации в кадрах
     edgerunnerSlashDir *= -1;
@@ -100,9 +100,9 @@
       isSlash: true
     });
     
-    playSound('melee');
+    playSound('edgerunner');
     
-  } else if (playerClass === 'magic') {
+  } else if (playerClass === 'netrunner') {
     // НЕТРАННЕР - ЛКМ: Моноструна (хлыст/змейка)
     const baseDmg = stats.dmg * atkDmgBonus;
     const startDist = 20;
@@ -270,7 +270,7 @@ function tryAbility1() {
   const stats = getPlayerStats();
   const c = classes[playerClass];
 
-  if (playerClass === 'melee') {
+  if (playerClass === 'edgerunner') {
     // ЭДЖРАННЕР: ВРАЩАЮЩИЙСЯ КЛИНОК (1)
     const a1DmgBonus = 1 + getSkillBonus('a1Dmg');
     const a1DurationBonus = 1 + getSkillBonus('a1Duration') / 90;
@@ -291,7 +291,7 @@ function tryAbility1() {
 
     shake = 3;
     showMsg('ВРАЩАЮЩИЙСЯ КЛИНОК!', '#f0f');
-  } else if (playerClass === 'magic') {
+  } else if (playerClass === 'netrunner') {
     // === НЕТРАННЕР: КИБЕР-ВЗЛОМ (1) ===
     const a1DmgBonus = 1 + getSkillBonus('a1Dmg');
     const a1RadiusBonus = 1 + getSkillBonus('a1Radius');
@@ -390,7 +390,7 @@ function tryAbility2() {
   const stats = getPlayerStats();
   const c = classes[playerClass];
 
-  if (playerClass === 'melee') {
+  if (playerClass === 'edgerunner') {
     // ЭДЖРАННЕР: ЭМИ-ГРАНАТА (2)
     const a2DmgBonus = 1 + getSkillBonus('a2Dmg');
     const a2RadiusBonus = 1 + getSkillBonus('a2Radius');
@@ -417,7 +417,7 @@ function tryAbility2() {
 
     shake = 2;
     showMsg('ЭМИ-ГРАНАТА!', '#ff0');
-  } else if (playerClass === 'magic') {
+  } else if (playerClass === 'netrunner') {
     // === НЕТРАННЕР: КИБЕР-ДЕМОНЫ (2) ===
     const a2DmgBonus = 1 + getSkillBonus('a2Dmg');
     const a2CountBonus = Math.floor(getSkillBonus('a2Count'));
@@ -510,7 +510,7 @@ function tryUlt() {
   playSound('ult');
   const stats = getPlayerStats();
 
-  if (playerClass === 'melee') {
+  if (playerClass === 'edgerunner') {
     if (player.ultCharge < player.ultMaxCharge) return;
     player.ultCd = 1500; // 25 секунд
     player.ultCharge = 0;
@@ -550,7 +550,7 @@ function tryUlt() {
         size: 4
       });
     }
-  } else if (playerClass === 'magic') {
+  } else if (playerClass === 'netrunner') {
     if (player.ultCharge < player.ultMaxCharge) return;
     const ultDmgBonus = 1 + getSkillBonus('ultDmg');
     player.ultCd = 600; player.ultCharge = 0;

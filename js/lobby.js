@@ -40,7 +40,13 @@ function enterLobby() {
       });
     }
     fade.style.opacity = '0';
-    lobbyLoop();
+
+    // Анти-дубль: чтобы lobbyLoop не стартовал несколько раз и не ускорял движение/анимации
+    window.__lobbyLoopStarted = window.__lobbyLoopStarted ?? false;
+    if (!window.__lobbyLoopStarted) {
+      window.__lobbyLoopStarted = true;
+      lobbyLoop();
+    }
   }, 1500);
 }
 
@@ -190,6 +196,10 @@ function lobbySelectClass() {
   if (!lobbyActive || !lobbySelectedClass) return;
   playSound('ui_click');
   lobbyActive = false;
+
+  // Сбрасываем флаг RAF-цикла лобби, чтобы следующий заход снова запустил ровно один loop
+  window.__lobbyLoopStarted = false;
+
   const fade = document.getElementById('fade-overlay');
   const hud = document.getElementById('lobby-hud');
   hud.style.opacity = '0';
