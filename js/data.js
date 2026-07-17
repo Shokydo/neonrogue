@@ -1,10 +1,10 @@
 const W = 800;
-const H = 600;
+// const H = 600; // fixed: prevent Identifier 'H' redeclaration (use window.H below)
 let gameRunning = false;
 let gamePaused = false;
 let keys = {};
 let isRebinding = false;
-let mouse = { x: W / 2, y: H / 2, down: false };
+let mouse = { x: W / 2, y: (typeof window !== 'undefined' ? window.H : 600) / 2, down: false };
 let playerClass = 'melee';
 let camera = { x: 0, y: 0 };
 
@@ -13,7 +13,11 @@ let camera = { x: 0, y: 0 };
 // Если data.js случайно подгружается повторно, var/глобальные присваивания предотвращают SyntaxError.
 // Avoid redeclaration crashes if this script is evaluated twice.
 // Use global-safe assignments.
-if (typeof window !== 'undefined') { window.W = W; window.H = H; }
+// W/H не переопределяем (H мог быть закомментирован для фикса redeclaration)
+if (typeof window !== 'undefined') {
+  window.W = W;
+  window.H = typeof window.H !== 'undefined' ? window.H : 600;
+}
 
 // If evaluated twice, keep the same keys object.
 if (typeof window !== 'undefined') window.keys = keys;

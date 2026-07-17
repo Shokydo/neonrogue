@@ -1,4 +1,8 @@
-﻿// Переменные keys и isRebinding уже объявлены в data.js, здесь их НЕ ОБЪЯВЛЯЕМ
+﻿// Глобальные переменные для инпута (чтобы lobby.js видел их независимо от порядка загрузки)
+window.isRebinding = window.isRebinding ?? false;
+window.keys = window.keys ?? {};
+let isRebinding = window.isRebinding;
+let keys = window.keys;
 
 document.addEventListener('keydown', e => {
     if (isRebinding) return;
