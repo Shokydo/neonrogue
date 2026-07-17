@@ -2,7 +2,7 @@
 let gamePaused = false;
 let keys = {};
 let mouse = {x:W/2, y:H/2, down:false};
-let playerClass = 'melee';
+let playerClass = 'edgerunner';
 
 let camera = { x: 0, y: 0 };
 const WORLD_W = 4000;
@@ -26,9 +26,9 @@ const player = {
 };
 
 const classes = {
-  melee: { name:'ЭДЖРАННЕР', type:'БЛИЖНИЙ БОЙ', color:'#f0f', attackCd:12, dmg:30, range:55, qName:'РЫВОК', eName:'ВОРТЕКС', qCd:90, eCd:360, a1Name:'ВРАЩ. КЛИНОК', a2Name:'ЭМИ-ГРАНАТА', ultName:'САНДЕВИСТАН', ultCd:360 },
-  magic: { name:'НЕТРАННЕР', type:'МАГИЯ', color:'#a0f', attackCd:55, dmg:45, range:220, qName:'РЫВОК', eName:'МЕТЕОР', qCd:90, eCd:360, a1Name:'КИБЕР-ВЗЛОМ', a2Name:'КИБЕР-ДЕМОН', ultName:'ЧЁРНАЯ СТЕНА', ultCd:360 },
-  tech: { name:'ТЕХНИК', type:'ПИСТОЛЕТ/ЩИТ', color:'#ff0', attackCd:32, dmg:30, range:500, qName:'РЫВОК', eName:'ЩИТ', qCd:90, eCd:180, a1Name:'ТУРЕЛЬ', a2Name:'ДРОН', ultName:'МЕХ-КОСТЮМ', ultCd:1500 }
+  edgerunner: { name:'EDGERUNNER', type:'CYBORG', color:'#f0f', attackCd:12, dmg:30, range:55, qName:'DASH', eName:'WHIRLPOOL', qCd:90, eCd:360, a1Name:'VORTEX RIFLE', a2Name:'EMP GRENADE', ultName:'SANDDEVISTAN', ultCd:360 },
+  netrunner: { name:'NETRUNNER', type:'HACKER', color:'#a0f', attackCd:55, dmg:45, range:220, qName:'DASH', eName:'METEOR', qCd:90, eCd:360, a1Name:'SYSTEM BREAK', a2Name:'CYBER DEMON', ultName:'BLACK WALL', ultCd:360 },
+  tech: { name:'TECHNIC', type:'PILOT/DRONE', color:'#ff0', attackCd:32, dmg:30, range:500, qName:'DASH', eName:'SHIELD', qCd:90, eCd:180, a1Name:'TURRET', a2Name:'COMBAT DRONE', ultName:'EXOSUIT', ultCd:1500 }
 };
 
 let enemies = [], projectiles = [], particles = [], pickups = [], damageTexts = [];
@@ -83,11 +83,24 @@ let floorImgLoaded = false;
 floorImg.onload = () => { floorImgLoaded = true; };
 
 const enemyTypes = [
-  { name:'ГУЛ', color:'#f00', hp:30, speed:1.2, size:12, dmg:18, xp:10, attack:'melee', dmgVar:5 },
-  { name:'СТРЕЛОК', color:'#0f0', hp:25, speed:1.5, size:11, dmg:20, xp:15, attack:'ranged', dmgVar:8 },
-  { name:'БЕРСЕРК', color:'#f80', hp:80, speed:0.7, size:18, dmg:35, xp:25, attack:'melee', dmgVar:10 },
-  { name:'ПРЫГУН', color:'#a0f', hp:40, speed:1.8, size:10, dmg:15, xp:20, attack:'melee', dmgVar:6 },
-  { name:'БЕГУН', color:'#ff0', hp:15, speed:2.8, size:8, dmg:12, xp:8, attack:'melee', dmgVar:4 }
+  { name:'GRUNT', color:'#f00', hp:30, speed:1.2, size:12, dmg:18, xp:10, attack:'melee', dmgVar:5 },
+  { name:'ARCHER', color:'#0f0', hp:25, speed:1.5, size:11, dmg:20, xp:15, attack:'ranged', dmgVar:8 },
+  { name:'BERSERKER', color:'#f80', hp:80, speed:0.7, size:18, dmg:35, xp:25, attack:'melee', dmgVar:10 },
+  { name:'JUMPER', color:'#a0f', hp:40, speed:1.8, size:10, dmg:15, xp:20, attack:'melee', dmgVar:6 },
+  { name:'SPEEDSTER', color:'#ff0', hp:15, speed:2.8, size:8, dmg:12, xp:8, attack:'melee', dmgVar:4 }
+];
+
+const TOWER_TYPE = { name:'TOWER', color:'#f80', hp:120, speed:0, size:22, dmg:0, xp:20, attack:'ranged', dmgVar:0, tower:true };
+
+const IMPLANT_TYPES = [
+  { id:'dmg', name:'DAMAGE IMPLANT', color:'#f00', stat:'dmgPct', base:5, maxStacks:10, desc:'+5% DAMAGE per stack' },
+  { id:'hp', name:'HP IMPLANT', color:'#0f0', stat:'maxHpPct', base:5, maxStacks:10, desc:'+5% MAX HP per stack' },
+  { id:'def', name:'DEFENSE IMPLANT', color:'#0ff', stat:'defensePct', base:1, maxStacks:50, desc:'+1% DEFENSE per stack (50% max)' },
+  { id:'atkSpd', name:'SPEED IMPLANT', color:'#ff0', stat:'atkSpeedPct', base:4, maxStacks:10, desc:'+4% ATK SPEED per stack' },
+  { id:'range', name:'RANGE IMPLANT', color:'#a0f', stat:'rangePct', base:5, maxStacks:8, desc:'+5% RANGE per stack' },
+  { id:'hpRegen', name:'REGEN IMPLANT', color:'#f90', stat:'hpRegenPct', base:2, maxStacks:5, desc:'+2% HP REGEN per stack' },
+  { id:'qCd', name:'QDIMPLANT', color:'#ff88ff', stat:'qCdPct', base:8, maxStacks:10, desc:'-8% ABILITY 1 COOLDOWN per stack' },
+  { id:'luck', name:'LUCK IMPLANT', color:'#ffc', stat:'luckPct', base:3, maxStacks:12, desc:'+3% DROP CHANCE per stack' }
 ];
 
 const TOWER_TYPE = { name:'БАШНЯ', color:'#f80', hp:120, speed:0, size:22, dmg:0, xp:20, attack:'ranged', dmgVar:0, tower:true };
