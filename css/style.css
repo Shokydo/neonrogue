@@ -106,6 +106,34 @@ body {
   opacity: 0; transform: translateX(30px);
 }
 
+/* --- МЕНЮ ПАУЗЫ --- */
+#pauseMenu {
+  position: fixed; inset: 0;
+  background: rgba(5, 5, 16, 0.92);
+  display: none; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 250; backdrop-filter: blur(5px);
+}
+#pauseMenu.show { display: flex; }
+#pauseMenu h2 {
+  font-family: 'Orbitron', sans-serif; font-size: 48px; color: var(--neon-yellow);
+  text-shadow: 0 0 20px var(--neon-yellow); letter-spacing: 8px; margin-bottom: 40px;
+}
+.pause-btns { display: flex; flex-direction: column; gap: 16px; }
+.pause-btns button {
+  padding: 14px 50px; font-family: 'Orbitron', sans-serif; font-size: 16px;
+  border: 2px solid var(--neon-cyan); background: transparent; color: var(--neon-cyan);
+  cursor: pointer; transition: all 0.2s; letter-spacing: 3px; min-width: 300px;
+  clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+}
+.pause-btns button:hover {
+  transform: scale(1.05); background: rgba(0, 243, 255, 0.1);
+  box-shadow: 0 0 25px var(--neon-cyan); border-color: var(--neon-yellow); color: var(--neon-yellow);
+}
+.pause-hint {
+  margin-top: 30px; font-family: 'Share Tech Mono', monospace;
+  font-size: 12px; color: #555; letter-spacing: 2px;
+}
+
 /* --- СТАРТОВЫЙ ЭКРАН --- */
 #start {
   position: fixed; inset: 0;

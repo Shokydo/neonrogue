@@ -93,6 +93,16 @@
   <button onmouseover="playSound('ui_hover'); this.style.boxShadow='0 0 30px #0ff'" onmouseout="this.style.boxShadow='none'" onclick="location.reload()" style="padding:15px 40px; font-family:'Courier New',monospace; font-size:20px; border:2px solid #0ff; background:transparent; color:#0ff; cursor:pointer; letter-spacing:3px; transition:all 0.2s;">ПЕРЕЗАГРУЗИТЬ</button>
 </div>
 
+<div id="pauseMenu">
+  <h2>ПАУЗА</h2>
+  <div class="pause-btns">
+    <button onclick="resumeGame()">ВЕРНУТЬСЯ</button>
+    <button onclick="openSkillsFromPause()">МЕНЮ ПРОКАЧКИ</button>
+    <button onclick="location.reload()">ПЕРЕЗАПУСК</button>
+  </div>
+  <div class="pause-hint">ESC — продолжить</div>
+</div>
+
 <div id="skillMenu">
   <h2>ПРОКАЧКА</h2>
   <div class="skill-points">ОЧКИ: <span id="skillPoints">0</span></div>

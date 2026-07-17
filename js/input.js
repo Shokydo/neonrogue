@@ -11,7 +11,12 @@
   if (k === '3') tryUlt();
   if (k === 'e' || k === 'у') { e.preventDefault(); toggleSkillMenu(); }
   if (k === 'f' || k === 'а') { if (pendingPickup) takePickup(); }
-  if (k === 'escape') { if (skillMenuOpen) { toggleSkillMenu(); } else if (pendingPickup) { skipPickup(); } }
+  if (k === 'escape') {
+    e.preventDefault();
+    if (skillMenuOpen) { toggleSkillMenu(); }
+    else if (pendingPickup) { skipPickup(); }
+    else if (gameRunning) { togglePause(); }
+  }
   if (e.code === 'Space') { e.preventDefault(); if (!player.charging) tryAttack(); }
 });
 document.addEventListener('keyup', e => {

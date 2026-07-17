@@ -22,8 +22,31 @@ function changeMusic(videoId) {
 }
 
 function loop() {
-  update(); draw();
+  if (!gamePaused) { update(); draw(); }
   if (gameRunning) requestAnimationFrame(loop); else draw();
+}
+
+// --- Pause Menu ---
+let pauseOpen = false;
+
+function togglePause() {
+  if (!gameRunning || skillMenuOpen) return;
+  pauseOpen = !pauseOpen;
+  gamePaused = pauseOpen;
+  document.getElementById('pauseMenu').classList.toggle('show', pauseOpen);
+}
+
+function resumeGame() {
+  pauseOpen = false;
+  gamePaused = false;
+  document.getElementById('pauseMenu').classList.remove('show');
+}
+
+function openSkillsFromPause() {
+  pauseOpen = false;
+  gamePaused = false;
+  document.getElementById('pauseMenu').classList.remove('show');
+  toggleSkillMenu();
 }
 
 function showMsg(text, color) {
@@ -61,6 +84,8 @@ window.tryAbility1 = tryAbility1;
 window.tryAbility2 = tryAbility2;
 window.tryUlt = tryUlt;
 window.toggleSkillMenu = toggleSkillMenu;
+window.resumeGame = resumeGame;
+window.openSkillsFromPause = openSkillsFromPause;
 window.takePickup = takePickup;
 window.skipPickup = skipPickup;
 window.playSound = playSound;
