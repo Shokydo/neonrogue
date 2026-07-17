@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cv.addEventListener('mousedown', e => {
         if (e.button === 0) {
-            mouse.down = true;
+            window.mouse.down = true;
         }
         if (e.button === 2) {
             e.preventDefault();
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cv.addEventListener('mouseup', e => {
         if (e.button === 0) {
-            mouse.down = false;
+            window.mouse.down = false;
         }
         if (e.button === 2) {
             if (typeof playerClass !== 'undefined' && playerClass === 'tech') {

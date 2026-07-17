@@ -21,5 +21,8 @@
   window.gameRunning = window.gameRunning ?? false;
   window.gamePaused = window.gamePaused ?? false;
   window.keys = window.keys ?? {};
+
+  // Input mouse is required by input.js (mouse.down / mouse.x,y)
+  window.mouse = window.mouse ?? { x: window.W / 2, y: window.H / 2, down: false };
 })();
 

@@ -1,32 +1,14 @@
-// W/H объявляем безопасно, чтобы не ловить redeclare при повторной загрузке data.js
-// (другие модули/скрипты могут переоценивать data.js)
-var W = (typeof window !== 'undefined' && typeof window.W !== 'undefined') ? window.W : (typeof window !== 'undefined' && typeof window.__DEFAULT_W !== 'undefined' ? window.__DEFAULT_W : 800);
-var H = (typeof window !== 'undefined' && typeof window.H !== 'undefined') ? window.H : 600;
+const W = window.W;
+const H = window.H;
 let gameRunning = window.gameRunning ?? false;
 let gamePaused = window.gamePaused ?? false;
 
-let keys = window.keys || {};
-let isRebinding = false;
-let mouse = { x: W / 2, y: H / 2, down: false };
+const keys = window.keys ?? {};
+let isRebinding = window.isRebinding ?? false;
+const mouse = window.mouse ?? { x: W / 2, y: H / 2, down: false };
 
-// Если скрипт подгружается повторно, H/W не должны падать из-за redeclare.
-// Поэтому W/H объявлены через var, а значения синхронизируются через window выше.
 let playerClass = 'melee';
-let camera = { x: 0, y: 0 };
-
-// === ДАЛЕЕ ИДЕТ ТВОЙ ОРИГИНАЛЬНЫЙ КОД (классы, враги и т.д.) ===
-// NOTE: эти значения используются глобально в нескольких файлах.
-// Если data.js случайно подгружается повторно, var/глобальные присваивания предотвращают SyntaxError.
-// Avoid redeclaration crashes if this script is evaluated twice.
-// Use global-safe assignments.
-// W/H не переопределяем (H мог быть закомментирован для фикса redeclaration)
-if (typeof window !== 'undefined') {
-  window.W = W;
-  window.H = H;
-}
-
-// If evaluated twice, keep the same keys object.
-if (typeof window !== 'undefined') window.keys = keys;
+let camera = window.camera ?? { x: 0, y: 0 };
 const WORLD_W = 4000;
 const WORLD_H = 4000;
 

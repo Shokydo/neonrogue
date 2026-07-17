@@ -2,12 +2,11 @@
 const ctx = cv.getContext('2d');
 ctx.imageSmoothingEnabled = false;
 
-let W = 0, H = 0;
 function resizeCanvas() {
   cv.width = window.innerWidth;
   cv.height = window.innerHeight;
-  W = cv.width;
-  H = cv.height;
+  window.W = cv.width;
+  window.H = cv.height;
 }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
