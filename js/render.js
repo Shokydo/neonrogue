@@ -167,7 +167,8 @@ function draw() {
     if (e.type.alpha) ctx.globalAlpha = e.type.alpha;
     const s = e.size;
     if (e.type.tower) {
-      drawChar2D(0, 0, s*1.6, s*1.6, s*0.5, e.type.color, 0, 0, 0, false);
+      // Tower: body 28x28, head 18x18
+      drawChar2D(0, 0, 28, 28, 18, e.type.color, 0, 0, 0, false);
       ctx.fillStyle = '#000';
       ctx.fillRect(-s*0.3, -s*1.2, s*0.6, s*0.6);
       ctx.fillStyle = e.type.color; ctx.fillRect(-s*0.15, -s*0.9, s*0.3, s*0.3);
@@ -175,10 +176,11 @@ function draw() {
       ctx.beginPath(); ctx.arc(0, -s, s + 5, 0, Math.PI*2); ctx.stroke();
     } else {
       const eAngle = Math.atan2(player.y - e.y, player.x - e.x);
-      drawChar2D(0, 0, s*1.6, s*1.6, s*0.5, e.type.color, eAngle, s*0.8, s*0.4, false);
+      // Regular enemy: body 24x24, head 14x14
+      drawChar2D(0, 0, 24, 24, 14, e.type.color, eAngle, 14, 4, false);
     }
     if (e.type.boss) {
-      const charTop = -(s*1.6 + s*0.5*2);
+      const charTop = -(24 + 14*2);
       ctx.fillStyle = '#400'; ctx.fillRect(-40, charTop - 15, 80, 6);
       ctx.fillStyle = '#f00'; ctx.fillRect(-40, charTop - 15, 80 * (e.hp/e.maxHp), 6);
       ctx.fillStyle = '#ff0'; ctx.font = '10px monospace'; ctx.textAlign = 'center'; ctx.fillText(e.type.name, 0, charTop - 20);
@@ -285,9 +287,10 @@ function draw() {
   const pSwing = player.attackCd > 8 ? Math.sin((player.attackCd - 8) * 0.4) : 0;
   const px = player.x - camera.x, py = player.y - camera.y + pBob;
 
-  const bodyW = playerClass === 'tech' ? 24 : 20;
-  const bodyH = playerClass === 'tech' ? 26 : 22;
-  const headSize = playerClass === 'tech' ? 10 : 8;
+  // Player: body 24x24 (square), head 16x16 (smaller square)
+  const bodyW = 24;
+  const bodyH = 24;
+  const headSize = 16;
   const armLen = playerClass === 'melee' ? 18 : 14;
   const armW = playerClass === 'melee' ? 6 : 4;
 
