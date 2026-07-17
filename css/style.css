@@ -643,3 +643,62 @@ body {
   background: var(--neon-green); color: #000;
   box-shadow: 0 0 30px var(--neon-green);
 }
+
+/* --- РЕДАКТОР ИНТЕРФЕЙСА --- */
+.ui-editor-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.7); z-index: 350;
+  flex-direction: column; align-items: center; padding-top: 20px;
+}
+.ui-editor-overlay.active { display: flex; }
+
+.editor-header {
+  background: rgba(10, 15, 40, 0.95);
+  border: 2px solid var(--neon-yellow);
+  padding: 15px 30px;
+  display: flex; flex-direction: column; align-items: center; gap: 15px;
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 95% 100%, 0 100%);
+}
+.editor-header h3 {
+  font-family: 'Orbitron', sans-serif; color: var(--neon-yellow);
+  margin: 0; letter-spacing: 3px; font-size: 18px;
+}
+.editor-controls {
+  display: flex; gap: 20px; align-items: center; flex-wrap: wrap; justify-content: center;
+}
+.editor-controls label {
+  color: var(--neon-cyan); font-family: 'Share Tech Mono', monospace;
+  display: flex; align-items: center; gap: 10px; font-size: 14px;
+}
+.editor-controls input[type="range"] {
+  width: 120px; -webkit-appearance: none; height: 4px;
+  background: #222; border: 1px solid var(--neon-cyan); outline: none;
+}
+.editor-controls input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 14px; height: 14px;
+  background: var(--neon-pink); cursor: pointer;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+.editor-hint {
+  color: var(--neon-pink); font-family: 'Share Tech Mono', monospace;
+  margin-top: 10px; font-size: 13px;
+}
+
+.ui-element-editable {
+  outline: 2px dashed var(--neon-yellow) !important;
+  outline-offset: 5px; cursor: move !important;
+  z-index: 360 !important; position: fixed !important;
+  pointer-events: auto !important;
+  transition: outline-color 0.2s;
+}
+.ui-element-editable:hover {
+  outline-color: var(--neon-green) !important;
+  box-shadow: 0 0 20px rgba(252, 238, 10, 0.3);
+}
+.ui-element-editable.selected {
+  outline-color: var(--neon-cyan) !important;
+  outline-style: solid !important;
+}
+.ui-element-editable.hidden-ui {
+  opacity: 0.15 !important; pointer-events: none;
+}

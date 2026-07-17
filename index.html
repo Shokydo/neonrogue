@@ -237,6 +237,7 @@
     </div>
     <div id="tab-interface" class="tab-content">
       <div class="interface-controls">
+        <button class="cyber-btn" onclick="toggleUIMode()">РЕДАКТИРОВАТЬ ИНТЕРФЕЙС</button>
         <div class="checkbox-row">
           <input type="checkbox" id="crtToggle" checked onchange="toggleCRT(this.checked)">
           <label for="crtToggle">Эффект шума (CRT) на экране</label>
@@ -249,6 +250,20 @@
     </div>
     <button class="save-btn" onclick="saveSettingsAndClose()">СОХРАНИТЬ И ЗАКРЫТЬ</button>
   </div>
+</div>
+
+<!-- ================= РЕДАКТОР ИНТЕРФЕЙСА ================= -->
+<div id="uiEditorOverlay" class="ui-editor-overlay">
+  <div class="editor-header">
+    <h3>РЕДАКТОР ИНТЕРФЕЙСА</h3>
+    <div class="editor-controls">
+      <label>Масштаб: <input type="range" id="uiScale" min="0.5" max="2" step="0.1" value="1" oninput="updateSelectedUI()"></label>
+      <label>Поворот: <input type="range" id="uiRotation" min="0" max="360" value="0" oninput="updateSelectedUI()"></label>
+      <button class="cyber-btn small" onclick="toggleUIElementVisibility()">ВКЛ/ВЫКЛ</button>
+      <button class="cyber-btn small danger" onclick="exitUIMode()">ЗАВЕРШИТЬ</button>
+    </div>
+  </div>
+  <p class="editor-hint">Перетаскивайте элементы мышью. Кликните для масштаба и поворота.</p>
 </div>
 
 <script src="js/audio.js"></script>
