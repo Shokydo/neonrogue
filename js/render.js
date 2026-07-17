@@ -1,15 +1,39 @@
 ﻿function drawFloorTexture() {
-  if (!floorImgLoaded) return;
-  const tileSize = 256;
-  const startX = Math.floor(camera.x / tileSize) * tileSize;
-  const startY = Math.floor(camera.y / tileSize) * tileSize;
-  ctx.globalAlpha = 0.15;
-  for (let x = startX; x < camera.x + W; x += tileSize) {
-    for (let y = startY; y < camera.y + H; y += tileSize) {
-      ctx.drawImage(floorImg, x - camera.x, y - camera.y, tileSize, tileSize);
-    }
+  const gridSize = 80;
+  const offsetX = camera.x % gridSize;
+  const offsetY = camera.y % gridSize;
+
+  ctx.strokeStyle = 'rgba(0, 243, 255, 0.07)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (let x = -offsetX; x < W; x += gridSize) {
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, H);
   }
-  ctx.globalAlpha = 1;
+  for (let y = -offsetY; y < H; y += gridSize) {
+    ctx.moveTo(0, y);
+    ctx.lineTo(W, y);
+  }
+  ctx.stroke();
+
+  if (Math.random() < 0.015) {
+    ctx.fillStyle = 'rgba(0, 243, 255, 0.04)';
+    const glitchY = Math.random() * H;
+    ctx.fillRect(0, glitchY, W, Math.random() * 30 + 10);
+  }
+
+  if (floorImgLoaded) {
+    const tileSize = 256;
+    const startX = Math.floor(camera.x / tileSize) * tileSize;
+    const startY = Math.floor(camera.y / tileSize) * tileSize;
+    ctx.globalAlpha = 0.08;
+    for (let x = startX; x < camera.x + W; x += tileSize) {
+      for (let y = startY; y < camera.y + H; y += tileSize) {
+        ctx.drawImage(floorImg, x - camera.x, y - camera.y, tileSize, tileSize);
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
 }
 
 function draw() {
@@ -139,7 +163,15 @@ function draw() {
   
   particles.forEach(p => {
     const sx = p.x - camera.x, sy = p.y - camera.y;
-    ctx.globalAlpha = p.life / 40; ctx.fillStyle = p.color; ctx.fillRect(sx, sy, p.size, p.size);
+    ctx.globalAlpha = p.life / 40;
+    ctx.fillStyle = p.color;
+    ctx.fillRect(sx - p.size/2, sy - p.size/2, p.size, p.size);
+    if (p.size > 3) {
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 10;
+      ctx.fillRect(sx - p.size/2, sy - p.size/2, p.size, p.size);
+      ctx.shadowBlur = 0;
+    }
   });
   ctx.globalAlpha = 1;
   
