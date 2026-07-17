@@ -30,77 +30,72 @@
   }
 }
 
-function adjustBrightness(hex, amount) {
-  let h = hex.slice(1);
-  if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
-  const r = Math.min(255, Math.max(0, parseInt(h.slice(0,2),16) + amount));
-  const g = Math.min(255, Math.max(0, parseInt(h.slice(2,4),16) + amount));
-  const b = Math.min(255, Math.max(0, parseInt(h.slice(4,6),16) + amount));
-  return `rgb(${r},${g},${b})`;
-}
+function drawChar2D(x, y, bodyW, bodyH, headR, color, angle, armLen, armW, isPlayer) {
+  const isHit = isPlayer ? (player.invuln > 0 && Math.floor(player.invuln / 3) % 2) : false;
+  const drawColor = isHit ? '#fff' : color;
 
-function drawChar2D(x, y, bodyW, bodyH, headR, color, angle, armLen, armW, glow) {
-  const topColor = adjustBrightness(color, 35);
-  const botColor = adjustBrightness(color, -25);
-
-  ctx.fillStyle = 'rgba(0,0,0,0.25)';
+  // Shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
   ctx.beginPath();
-  ctx.ellipse(x, y + 2, bodyW * 0.45, bodyW * 0.2, 0, 0, Math.PI * 2);
+  ctx.ellipse(x, y + 2, bodyW * 0.4, bodyW * 0.15, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  ctx.fillStyle = topColor;
-  ctx.fillRect(x - bodyW / 2, y - bodyH, bodyW, bodyH * 0.45);
-  ctx.fillStyle = color;
-  ctx.fillRect(x - bodyW / 2, y - bodyH * 0.55, bodyW, bodyH * 0.25);
-  ctx.fillStyle = botColor;
-  ctx.fillRect(x - bodyW / 2, y - bodyH * 0.3, bodyW, bodyH * 0.3);
-
-  ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+  // Body - flat rect
+  ctx.fillStyle = drawColor;
+  ctx.fillRect(x - bodyW / 2, y - bodyH, bodyW, bodyH);
+  
+  // Body outline
+  ctx.strokeStyle = 'rgba(0,0,0,0.4)';
   ctx.lineWidth = 1;
   ctx.strokeRect(x - bodyW / 2, y - bodyH, bodyW, bodyH);
 
-  ctx.fillStyle = topColor;
+  // Head - flat circle on top
+  ctx.fillStyle = drawColor;
   ctx.beginPath();
-  ctx.arc(x, y - bodyH - headR + 3, headR, 0, Math.PI * 2);
+  ctx.arc(x, y - bodyH - headR + 2, headR, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = botColor;
-  ctx.beginPath();
-  ctx.arc(x, y - bodyH - headR + 3, headR, 0.15 * Math.PI, 0.85 * Math.PI);
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+  
+  // Head outline
+  ctx.strokeStyle = 'rgba(0,0,0,0.4)';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.arc(x, y - bodyH - headR + 3, headR, 0, Math.PI * 2);
+  ctx.arc(x, y - bodyH - headR + 2, headR, 0, Math.PI * 2);
   ctx.stroke();
 
-  const eyeOffX = Math.cos(angle) * headR * 0.3;
-  const eyeOffY = Math.sin(angle) * headR * 0.2;
-  const eyeY = y - bodyH - headR + 3 + eyeOffY;
+  // Eyes - show direction
+  const eyeOffX = Math.cos(angle) * headR * 0.35;
+  const eyeOffY = Math.sin(angle) * headR * 0.25;
+  const eyeY = y - bodyH - headR + 2 + eyeOffY;
   ctx.fillStyle = '#000';
-  ctx.fillRect(x + eyeOffX - 2.5, eyeY - 2, 5, 4);
+  ctx.fillRect(x + eyeOffX - 3, eyeY - 2, 6, 4);
   ctx.fillStyle = '#fff';
-  ctx.fillRect(x + eyeOffX - 1, eyeY - 1, 2, 2);
+  ctx.fillRect(x + eyeOffX - 1, eyeY, 2, 2);
 
+  // Weapon arm - rotates to face angle
   if (armLen > 0) {
     ctx.save();
-    ctx.translate(x, y - bodyH * 0.55);
+    ctx.translate(x, y - bodyH * 0.5);
     ctx.rotate(angle);
-    ctx.fillStyle = color;
-    ctx.fillRect(6, -armW / 2, armLen, armW);
-    ctx.fillStyle = botColor;
-    ctx.fillRect(6, armW / 2 - 1, armLen, 3);
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(6 + armLen - 2, -armW / 2 - 1, 3, armW + 2);
+    
+    // Arm
+    ctx.fillStyle = drawColor;
+    ctx.fillRect(4, -armW / 2, armLen, armW);
+    
+    // Weapon tip (bright)
+    ctx.fillStyle = isPlayer ? '#fff' : '#ffcc00';
+    ctx.fillRect(4 + armLen - 3, -armW / 2 - 1, 4, armW + 2);
+    
     ctx.restore();
   }
 
-  if (glow) {
+  // Player neon glow
+  if (isPlayer) {
     ctx.save();
     ctx.shadowColor = color;
     ctx.shadowBlur = 18;
     ctx.fillStyle = color;
-    ctx.globalAlpha = 0.15;
-    ctx.fillRect(x - bodyW / 2 - 4, y - bodyH - headR * 2, bodyW + 8, bodyH + headR * 2 + 6);
+    ctx.globalAlpha = 0.12;
+    ctx.fillRect(x - bodyW/2 - 4, y - bodyH - headR*2 - 4, bodyW + 8, bodyH + headR*2 + 8);
     ctx.globalAlpha = 1;
     ctx.restore();
   }
@@ -171,11 +166,9 @@ function draw() {
     if (sx < -50 || sx > W+50 || sy < -50 || sy > H+50) return;
     ctx.save(); ctx.translate(sx, sy);
     if (e.type.alpha) ctx.globalAlpha = e.type.alpha;
-    const eColor = e.hitFlash > 0 ? '#fff' : e.type.color;
-    ctx.shadowColor = e.type.color; ctx.shadowBlur = 12;
     const s = e.size;
     if (e.type.tower) {
-      drawChar2D(0, 0, s*2, s*2, s*0.6, eColor, 0, 0, 0, true);
+      drawChar2D(0, 0, s*2, s*2, s*0.6, e.type.color, 0, 0, 0, false);
       ctx.fillStyle = '#000';
       ctx.fillRect(-s*0.3, -s*1.2, s*0.6, s*0.6);
       ctx.fillStyle = e.type.color; ctx.fillRect(-s*0.15, -s*0.9, s*0.3, s*0.3);
@@ -183,7 +176,7 @@ function draw() {
       ctx.beginPath(); ctx.arc(0, -s, s + 5, 0, Math.PI*2); ctx.stroke();
     } else {
       const eAngle = Math.atan2(player.y - e.y, player.x - e.x);
-      drawChar2D(0, 0, s*2, s*2, s*0.6, eColor, eAngle, s*0.8, s*0.4, true);
+      drawChar2D(0, 0, s*2, s*2, s*0.6, e.type.color, eAngle, s*0.8, s*0.4, false);
     }
     if (e.type.boss) {
       const charTop = -(s*2 + s*0.6*2);
@@ -291,8 +284,6 @@ function draw() {
   const pMoving = (keys['w']||keys['a']||keys['s']||keys['d']||keys['ц']||keys['ф']||keys['в']||keys['ы']);
   const pBob = pMoving ? Math.sin(p3DTime * 2.5) * 3 : Math.sin(p3DTime * 1.2) * 1.5;
   const pSwing = player.attackCd > 8 ? Math.sin((player.attackCd - 8) * 0.4) : 0;
-  const pHitFlash = player.invuln > 0 && Math.floor(player.invuln / 3) % 2;
-  const pColor = pHitFlash ? '#fff' : classes[playerClass].color;
   const px = player.x - camera.x, py = player.y - camera.y + pBob;
 
   const bodyW = playerClass === 'tech' ? 28 : 24;
@@ -302,19 +293,19 @@ function draw() {
   const armW = playerClass === 'melee' ? 7 : 5;
 
   ctx.save();
-  drawChar2D(px, py, bodyW, bodyH, headR, pColor, player.angle, armLen, armW, true);
+  drawChar2D(px, py, bodyW, bodyH, headR, classes[playerClass].color, player.angle, armLen, armW, true);
 
   if (playerClass === 'melee') {
-    const mwX = px + Math.cos(player.angle) * (8 + armLen);
-    const mwY = py - bodyH * 0.55 + Math.sin(player.angle) * 8;
-    ctx.fillStyle = pColor; ctx.shadowColor = pColor; ctx.shadowBlur = 8;
+    const mwX = px + Math.cos(player.angle) * (4 + armLen);
+    const mwY = py - bodyH * 0.5 + Math.sin(player.angle) * 4;
+    ctx.fillStyle = classes[playerClass].color; ctx.shadowColor = classes[playerClass].color; ctx.shadowBlur = 8;
     ctx.fillRect(mwX - 3, mwY - 3, 6, 6);
     ctx.shadowBlur = 0;
   } else if (playerClass === 'magic') {
     const pulse = Math.sin(Date.now() * 0.008) * 0.3 + 0.7;
-    ctx.fillStyle = pColor; ctx.shadowColor = pColor; ctx.shadowBlur = 15 * pulse;
+    ctx.fillStyle = classes[playerClass].color; ctx.shadowColor = classes[playerClass].color; ctx.shadowBlur = 15 * pulse;
     ctx.beginPath();
-    ctx.arc(px, py - bodyH - headR + 3, headR + 4, 0, Math.PI * 2);
+    ctx.arc(px, py - bodyH - headR + 2, headR + 4, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
   } else if (playerClass === 'tech' && techieCombatDrone && techieCombatDrone.life > 0) {
