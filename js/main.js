@@ -4,11 +4,20 @@
 }
 
 function showMsg(text, color) {
-  const m = document.getElementById('msg');
-  m.textContent = text; m.style.color = color || '#ff0';
-  m.style.textShadow = `0 0 20px ${color}, 0 0 40px ${color}`;
-  m.classList.add('show');
-  setTimeout(() => m.classList.remove('show'), 1800);
+  const container = document.getElementById('notifications');
+  const el = document.createElement('div');
+  el.className = 'notif';
+  el.textContent = text;
+  el.style.color = color || '#ff0';
+  el.style.borderColor = color || '#ff0';
+  container.prepend(el);
+
+  while (container.children.length > 6) {
+    container.lastChild.remove();
+  }
+
+  setTimeout(() => el.classList.add('fading'), 1400);
+  setTimeout(() => el.remove(), 2200);
 }
 
 function dist(x1,y1,x2,y2) { return Math.hypot(x1-x2,y1-y2); }

@@ -81,16 +81,27 @@ body {
 }
 #chargeBar > div { height: 100%; background: linear-gradient(90deg, var(--neon-red), var(--neon-yellow)); width: 0%; }
 
-/* --- СООБЩЕНИЯ --- */
-#msg {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  font-size: 40px; color: var(--neon-yellow);
-  text-shadow: 0 0 20px var(--neon-pink), 0 0 40px var(--neon-cyan);
-  pointer-events: none; opacity: 0; transition: opacity 0.5s;
-  text-align: center; letter-spacing: 4px; z-index: 20;
-  font-family: 'Orbitron', sans-serif;
+/* --- УВЕДОМЛЕНИЯ --- */
+#notifications {
+  position: fixed; top: 10px; right: 10px;
+  width: 280px; z-index: 15; pointer-events: none;
+  display: flex; flex-direction: column; gap: 6px;
+  margin-top: 220px;
 }
-#msg.show { opacity: 1; }
+.notif {
+  padding: 8px 12px;
+  background: var(--bg-panel);
+  border-left: 3px solid var(--neon-cyan);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px; letter-spacing: 1px;
+  text-shadow: 0 0 5px currentColor;
+  opacity: 1; transform: translateX(0);
+  transition: opacity 0.8s, transform 0.4s;
+  clip-path: polygon(0 0, 100% 0, 97% 100%, 0 100%);
+}
+.notif.fading {
+  opacity: 0; transform: translateX(30px);
+}
 
 /* --- СТАРТОВЫЙ ЭКРАН --- */
 #start {
