@@ -1,23 +1,47 @@
-﻿// --- YouTube Music ---
+// --- YouTube Music ---
 let ytPlayer;
 const MUSIC_LOBBY = 'AF8LSurfct4';
 const MUSIC_GAME = 'y1qem-LI3Hs';
 
 function onYouTubeIframeAPIReady() {
-  ytPlayer = new YT.Player('yt-player', {
-    height: '0', width: '0',
-    videoId: MUSIC_LOBBY,
-    playerVars: { autoplay: 1, loop: 1, playlist: MUSIC_LOBBY, controls: 0, disablekb: 1 },
-    events: {
-      onReady: (e) => { e.target.setVolume(gameSettings ? gameSettings.audio.musicVolume : 40); e.target.playVideo(); }
-    }
-  });
+  try {
+    ytPlayer = new YT.Player('yt-player', {
+      height: '0', width: '0',
+      videoId: MUSIC_LOBBY,
+      playerVars: { autoplay: 1, loop: 1, playlist: MUSIC_LOBBY, controls: 0, disablekb: 1 },
+      events: {
+        onReady: (e) => { 
+          if (gameSettings) e.target.setVolume(gameSettings.audio.musicVolume); 
+          e.target.playVideo(); 
+        },
+        onError: () => {
+          console.log('YouTube API error, continuing without music');
+          ytPlayer = null;
+        }
+      }
+    });
+  } catch (e) {
+    console.log('YouTube API failed:', e);
+    ytPlayer = null;
+  }
 }
+
+// Timeout fallback if YouTube API fails to load
+setTimeout(() => {
+  if (!ytPlayer) {
+    console.log('YouTube API failed to load within 3 seconds, continuing without music');
+    ytPlayer = null;
+  }
+}, 3000);
 
 function changeMusic(videoId) {
   if (ytPlayer && ytPlayer.loadVideoById) {
-    ytPlayer.loadVideoById(videoId);
-    ytPlayer.setVolume(gameSettings ? gameSettings.audio.musicVolume : 40);
+    try {
+      ytPlayer.loadVideoById(videoId);
+      ytPlayer.setVolume(gameSettings ? gameSettings.audio.musicVolume : 40);
+    } catch (e) {
+      console.log('Failed to change music:', e);
+    }
   }
 }
 
